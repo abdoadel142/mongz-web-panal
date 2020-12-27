@@ -1,76 +1,68 @@
-import React, { Component } from 'react';
-import axios from "axios";
-class Login extends Component {
-    
-    constructor(props) {
-        super(props);
-    
-        this.state = {
-          email: "",
-          password: ""
-        };
-    
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-      }
-    
-      handleChange(event) {
-        this.setState({
-          [event.target.name]: event.target.value
-        });
-      }
-      handleSubmit(event) {
-axios.put("http://192.168.1.4:8080/auth/signup",{
-  email:this.state.email,
-  password:this.state.password,
-  
-}).then(function (response){
-  console.log(response);
-}).catch(err=>{
-  console.log(err);
-});
-      }
+import React, { useRef, useState } from "react"
+import  './Login.css'
+import { Link, useHistory } from "react-router-dom"
+import { Alert } from "react-bootstrap"
+import { useAuth } from "../../components/Contexts/AuthContext"
 
 
-    render() { 
-        return ( 
-            <div>
-        <form onSubmit={this.handleSubmit}>
-        <div className="form-inner">
-          <h2>Login</h2>
-        
-        
-        <div className="form-group">
-        <label htmlFor="email">Enter Email</label>
-          <input
-          id="email"
+export default function Login(){
+  const emailRef = useRef()
+  const passwordRef = useRef()
+  const [error, setError  ] = useState("")
+  const [loading, setLoading] = useState(false)
+  const  login  = useAuth()
+  const history = useHistory()
 
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={this.state.email}
-            onChange={this.handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-        <label htmlFor="password">Enter Password</label>
-        <input
-        id="password"
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={this.state.password}
-        onChange={this.handleChange}
-        required
-        />
-        </div>
-          <input type="submit" value="Login" />
-          </div>
-        </form>
-      </div>
-         );
+  async function handleSubmit(e) {
+    e.preventDefault()
+
+    try {
+      setError("")
+       setLoading(true)
+      await login(emailRef.current.value, passwordRef.current.value)
+      history.push("/")
+      setError("Failed to log in")
+
+    } catch {
+      setError("Failed to log in")
     }
+
+    setLoading(false)
+  }
+
+  return(
+    <>
+    <div className='container'>
+    <form onSubmit={handleSubmit}>
+    <div className="form-inner">
+      <h2>Login</h2>
+    
+     {error && <Alert variant="danger">{error}</Alert>}
+    <div className="form-group">
+    <label htmlFor="email">Enter Email</label>
+      <input
+      id="email"
+      type="email" ref={emailRef} 
+        name="email"
+        placeholder="Email"
+        required
+      />
+    </div>
+    <div className="form-group">
+    <label htmlFor="password">Enter Password</label>
+    <input
+    id="password"
+    type="password"
+    ref={passwordRef}
+    name="password"
+    placeholder="Password"
+    required
+    />
+    </div>
+      <input type="submit" value="Login" disabled={loading} />
+      </div>
+    </form>
+  </div>
+  </>
+  )
 }
- 
-export default Login;
