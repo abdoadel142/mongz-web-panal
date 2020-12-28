@@ -6,19 +6,23 @@ import Home from './pages/Home'
 import Reports from './pages/Reports'
 import Products from './pages/Products'
 import Login from './pages/auth/Login'
+import Signup from './pages/auth/Signup'
+import { AuthProvider } from "./components/Contexts/AuthContext"
+import PrivateRoute from './pages/PrivateRoute'
 function App() {
   return (
-    <>
-      {/* <Router>
-        <Navbar />
-        <Switch>
-          <Route path='/' exact component={Home} />
-          <Route path='/reports' component={Reports} />
-          <Route path='/products' component={Products} />
-        </Switch>
-      </Router> */}
-      
-      <Login/>
+    <>         
+         <Router>
+           <AuthProvider>
+            <Switch>
+              <PrivateRoute  exact path="/" component={Home} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/login" component={Login} />
+            </Switch>
+            </AuthProvider>
+        </Router>
+        
+       
     </>
   );
 }

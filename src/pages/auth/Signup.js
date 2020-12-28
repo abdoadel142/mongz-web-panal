@@ -5,12 +5,13 @@ import { Alert } from "react-bootstrap"
 import { useAuth } from "../../components/Contexts/AuthContext"
 import axios from 'axios';
 
-export default function Login(){
+export default function Signup(){
   const emailRef = useRef()
   const passwordRef = useRef()
+  const confirmPasswordRef = useRef()
   const [error, setError  ] = useState("")
   const [loading, setLoading] = useState(false)
-  const  {login}  = useAuth()
+  const  signup  = useAuth()
   const history = useHistory()
 
   async function handleSubmit(e) {
@@ -18,16 +19,15 @@ export default function Login(){
     e.preventDefault()
 
     try {
-      console.log(login);
       setError("")
        setLoading(true)
-       await login(emailRef.current.value, passwordRef.current.value)
-  
-      history.push("/") 
+       await signup(emailRef.current.value, passwordRef.current.value);
+    
+      history.push("/");
 
     } catch (err){
       console.log(err);
-      setError("Failed to log in")
+      setError("Failed to Signup in")
     }
 
     setLoading(false)
@@ -38,7 +38,7 @@ export default function Login(){
     <div className='container'>
     <form onSubmit={handleSubmit}>
     <div className="form-inner">
-      <h2>Login</h2>
+      <h2>Signup</h2>
     
      {error && <Alert variant="danger">{error}</Alert>}
     <div className="form-group">
@@ -62,10 +62,21 @@ export default function Login(){
     required
     />
     </div>
+    <div className="form-group">
+    <label htmlFor="Confirm password">Enter Password</label>
+    <input
+    id="password"
+    type="password"
+    ref={confirmPasswordRef}
+    name="confirmPassword"
+    placeholder="confirmPassword"
+    required
+    />
+    </div>
       <input type="submit" value="Login" disabled={loading} />
       </div>
     </form>
-    Need an account? <Link to="/signup">Sign Up</Link>
+    Already have an account? <Link to="/login">Log In</Link>
   </div>
   </>
   )

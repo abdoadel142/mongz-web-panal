@@ -10,23 +10,28 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState()
   const [loading, setLoading] = useState(true)
 
-  function signup(email, password) {
-  return  axios.put("http://192.168.1.4:8080/adminAuth/signup",{
+ async function signup(email, password) {
+  const user = await axios.put("http://192.168.1.3:8080/auth/adminSignup",{
   email:email,
   password:password,
-})
+});
+setCurrentUser(user);
+setLoading(false);
+return user;
+
   }
 
-  function login(email, password) {
-    return  axios.put("http://192.168.1.4:8080/adminAuth/login",{
+  async function login(email, password) {
+  const user= await axios.post("http://192.168.1.3:8080/auth/adminLogin",{
   email:email,
   password:password,
-})
+});
+setLoading(false);
+setCurrentUser(user.data.userId);
+return user;
+
   }
 
-  function logout() {
-    
-  }
 //   useEffect(() => {
 //     const unsubscribe = auth.onAuthStateChanged(user => {
 //       setCurrentUser(user)
@@ -40,12 +45,12 @@ export function AuthProvider({ children }) {
     currentUser,
     login,
     signup,
-    logout
+    
   }
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      { children}
     </AuthContext.Provider>
   )
 }
