@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import "./ProductForm.css";
+import Restaurants from "./Restaurants";
 
 class ProductForm extends Component {
   state = {
@@ -13,6 +14,7 @@ class ProductForm extends Component {
     imageUrl: "",
     address: "",
     openingHour: "",
+    // openingHours: "",
     closingHour: "",
     // menuId: "",
     rate: "2",
@@ -23,20 +25,28 @@ class ProductForm extends Component {
   };
 
   async componentDidMount() {
-    // const id = this.props.match.params.id;
-    // if (id !== "new") {
-    //   const { data } = await axios.get(
-    //     "http://192.168.1.71:8080/admin/addProduct"
-    //   );
-    //   //Clone
-    //   const state = { ...this.state };
-    //   //Edit
-    //   state.name = data.name;
-    //   state.price = data.price;
-    //   state.id = data.id;
-    //   //Set state
-    //   this.setState(state);
-    // }
+    const id = this.props.match.params.id;
+    if (id !== "new") {
+      console.log(id);
+      const { data } = await axios.get(
+        "http://192.168.1.71:8080/admin/restaurants/" + id
+      );
+
+      //Clone
+      const state = { ...this.state };
+      // //Edit
+      state.name = data.restaurant.name;
+      state.description = data.restaurant.description;
+      state.type = data.restaurant.type;
+      state.rate = data.restaurant.rate;
+      state.address = data.restaurant.address;
+      state.latitude = data.restaurant.location[0].latitude;
+      state.longitude = data.restaurant.location[0].longitude;
+
+      // state.openingHours = data.restaurant.openingHours;
+      //Set state
+      this.setState(state);
+    }
   }
 
   handleSubmit = async (e) => {
@@ -49,24 +59,20 @@ class ProductForm extends Component {
         ...this.state,
       };
       await axios.post("http://192.168.1.71:8080/admin/addProduct", obj);
-    } 
-    // else {
-    //   //EDit
-    //   const obj = {
-    //     ...this.state,
-    //     count: 0,
-    //     isInCart: false,
-    //   };
-    //   //Delete ID
-    //   delete obj.id;
+    } else {
+      //EDit
+      const obj = {
+        ...this.state,
+      };
 
-    //   await axios.put(
-    //     "http://192.168.1.71:8080/products/" + this.state.id,
-    //     obj
-    //   );
-    // }
+      await axios.put(
+        "http://192.168.1.71:8080/admin/restaurants/" +
+          this.props.match.params.id,
+        obj
+      );
+    }
 
-    // this.props.history.replace("/admin");
+    this.props.history.replace("/restaurants");
   };
 
   handleChange = (e) => {
@@ -205,17 +211,20 @@ class ProductForm extends Component {
               }}
             />
           </div>
-          <div className="inputfield">
-            <label>Type</label>
-            <div className="custom_select">
-              <select id="type" onChange={this.handleOptionChange}>
-                <option value="">Select</option>
-                <option value="restaurant">Restaurant</option>
-                <option value="pharmacie">Pharmacie</option>
-                <option value="grocerie">Grocerie</option>
-              </select>
+          {this.props.match.params.id === "new" && (
+            <div className="inputfield">
+              <label>Type</label>
+              <div className="custom_select">
+                <select id="type" onChange={this.handleOptionChange}>
+                  <option value="">Select</option>
+                  <option value="restaurant">Restaurant</option>
+                  <option value="pharmacie">Pharmacie</option>
+                  <option value="grocerie">Grocerie</option>
+                </select>
+              </div>
             </div>
-          </div>
+          )}
+
           <div className="inputfield">
             <input
               type="submit"
@@ -230,53 +239,3 @@ class ProductForm extends Component {
 }
 
 export default ProductForm;
-
-// <React.Fragment>
-//   <h1>
-//     {this.props.match.params.id === "new"
-//       ? "Add Product"
-//       : "Edit Product"}
-//   </h1>
-//   <form onSubmit={this.handleSubmit}>
-//     <div className="form-group">
-//       <label htmlFor="name">Name</label>
-//       <input
-//         className="form-control"
-//         onChange={this.handleChange}
-//         value={this.state.name}
-//         id="name"
-//         name="name"
-//         type="text"
-//       />
-//     </div>
-//     <div className="form-group">
-//       <label htmlFor="price">Description</label>
-//       <textarea
-//         rows="4"
-//         cols="50"
-//         className="form-control"
-//         onChange={this.handleChange}
-//         value={this.state.price}
-//         id="description"
-//         name="description"
-//         type="text"
-//       />
-//     </div>
-//     <div className="form-group">
-//       <label htmlFor="price">Location</label>
-//       <textarea
-//         rows="4"
-//         cols="50"
-//         className="form-control"
-//         onChange={this.handleChange}
-//         value={this.state.price}
-//         id="description"
-//         name="description"
-//         type="text"
-//       />
-//     </div>
-//     <button type="submit" className="btn btn-primary">
-//       {this.props.match.params.id === "new" ? "Add" : "Edit"}
-//     </button>
-//   </form>
-// </React.Fragment>

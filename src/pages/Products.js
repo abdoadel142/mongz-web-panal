@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-// import "../node_modules/bootstrap/dist/css/bootstrap.css";
 
 class Products extends Component {
   state = {
+    restaurants: [],
+    pharmacies: [],
+    groceries: [],
     products: [],
   };
 
@@ -19,15 +21,36 @@ class Products extends Component {
         }
         return res.json();
       })
-      .then((resData) => {
-        console.log(resData.posts);
+      .then((result) => {
         this.setState({
-          products: resData.posts.map((post) => {
+          restaurants: result.restaurants.map((restaurant) => {
             return {
-              ...post,
+              ...restaurant,
             };
           }),
         });
+        this.setState({
+          pharmacies: result.pharmacies.map((pharmacie) => {
+            return {
+              ...pharmacie,
+            };
+          }),
+        });
+        this.setState({
+          groceries: result.groceries.map((grocerie) => {
+            return {
+              ...grocerie,
+            };
+          }),
+        });
+        this.setState({
+          products: [
+            ...this.state.restaurants,
+            ...this.state.pharmacies,
+            ...this.state.groceries,
+          ],
+        });
+        console.log(this.state);
       })
       .catch(this.catchError);
   }
@@ -50,7 +73,7 @@ class Products extends Component {
     return this.props.product.count === 0
       ? "badge badge-warning m-2"
       : "badge badge-primary m-2";
-  };
+  }
 
   componentWillUnmount() {
     // console.log("Product ==> UNMOUNT");
@@ -71,7 +94,9 @@ class Products extends Component {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Price</th>
+              <th>Description</th>
+              <th>Address</th>
+              <th>Rate</th>
               <th></th>
               <th></th>
             </tr>
@@ -79,8 +104,10 @@ class Products extends Component {
           <tbody>
             {products.map((product) => (
               <tr key={product.id}>
-                <td>{product.title}</td>
-                <td>{product.content}</td>
+                <td>{product.name}</td>
+                <td>{product.description}</td>
+                <td>{product.address}</td>
+                <td>{product.rate}</td>
                 <td>
                   <i
                     onClick={() =>

@@ -1,11 +1,13 @@
 import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
 import Products from "../pages/Products";
 import Reports from "../pages/Reports";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 import "../App.css";
 import ProductForm from "../pages/ProductForm";
+import Restaurants from './Restaurants';
 
 function Home() {
   return (
@@ -15,6 +17,7 @@ function Home() {
         <Switch>
           <Route path="/reports" component={Reports} />
           <Route path="/products" component={Products} />
+          <Route path="/restaurants" component={Restaurants} />
           <Route
             path="/productform/:id"
             render={(props) => (
