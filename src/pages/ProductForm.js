@@ -5,23 +5,16 @@ import Restaurants from "./Restaurants";
 
 class ProductForm extends Component {
   state = {
-    // id: "",
     name: "",
     description: "",
     latitude: "",
     longitude: "",
-    // location: "",
     imageUrl: "",
     address: "",
     openingHour: "",
-    // openingHours: "",
     closingHour: "",
-    // menuId: "",
     rate: "2",
     type: "",
-    // restaurant: "",
-    // pharmacie: "",
-    // grocerie: "",
   };
 
   async componentDidMount() {
@@ -51,13 +44,14 @@ class ProductForm extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(this.state);
+    // console.log(this.state);
     //ADD
     if (this.props.match.params.id === "new") {
       //Call Backend
       const obj = {
         ...this.state,
       };
+      console.log(obj);
       await axios.post("http://192.168.1.71:8080/admin/addProduct", obj);
     } else {
       //EDit
@@ -71,7 +65,6 @@ class ProductForm extends Component {
         obj
       );
     }
-
     this.props.history.replace("/restaurants");
   };
 
@@ -87,8 +80,6 @@ class ProductForm extends Component {
   handleOptionChange = () => {
     let type = document.getElementById("type");
     let value = type.options[type.selectedIndex].value;
-    console.log(value);
-
     //Clone
     let state = { ...this.state };
     //Edit
@@ -109,11 +100,6 @@ class ProductForm extends Component {
   render() {
     return (
       <div className="wrapper">
-        {/* <h1>
-          {this.props.match.params.id === "new"
-            ? "Add Product"
-            : "Edit Product"}
-        </h1> */}
         <div class="title">
           {this.props.match.params.id === "new"
             ? "Add Product"

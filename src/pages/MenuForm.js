@@ -14,8 +14,8 @@ class MenuForm extends Component {
 
   async componentDidMount() {
     const id = this.props.match.params.id;
-
     console.log(id);
+
     const { data } = await axios.get(
       "http://192.168.1.71:8080/admin/restaurants/" + id
     );
@@ -35,23 +35,17 @@ class MenuForm extends Component {
     console.log(this.state);
     //ADD
     // if (this.props.match.params.id === "new") {
-      //Call Backend
-      const obj = {
-        ...this.state,
-      };
-      await axios.post("http://192.168.1.71:8080/admin/addMenu", obj);
-    // } 
-    // else {
+    //Call Backend
+    const obj = {
+      ...this.state,
+    };
+    //   await axios.post("http://192.168.1.71:8080/admin/addMenu", obj);
+    // } else {
     //   //EDit
     //   const obj = {
     //     ...this.state,
     //   };
-
-    //   await axios.put(
-    //     "http://192.168.1.71:8080/admin/restaurants/" +
-    //       this.props.match.params.id,
-    //     obj
-    //   );
+    await axios.put("http://192.168.1.71:8080/admin/addMenu", obj);
     // }
 
     this.props.history.replace("/restaurants");
@@ -72,7 +66,7 @@ class MenuForm extends Component {
         <div class="title">
           {this.props.match.params.id === "new"
             ? "Add Menu Item"
-            : "Edit Product"}
+            : "Add Menu Item"}
         </div>
         <form className="form" onSubmit={this.handleSubmit}>
           <div className="inputfield">
@@ -122,7 +116,7 @@ class MenuForm extends Component {
           <div className="inputfield">
             <input
               type="submit"
-              value={this.props.match.params.id === "new" ? "Add" : "Edit"}
+              value={this.props.match.params.id === "new" ? "Add" : "Add"}
               className="btn"
             />
           </div>
