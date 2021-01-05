@@ -96,6 +96,14 @@ class Restaurants extends Component {
                     className="fas fa-trash"
                   ></i>
                 </td>
+                <td>
+                  <i
+                    onClick={() =>
+                      this.props.history.push(`/menuform/${product._id}`)
+                    }
+                    className="fas fa-plus"
+                  ></i>
+                </td>
               </tr>
             ))}
           </tbody>

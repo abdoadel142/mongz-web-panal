@@ -8,6 +8,7 @@ import Navbar from "../components/Navbar";
 import "../App.css";
 import ProductForm from "../pages/ProductForm";
 import Restaurants from './Restaurants';
+import MenuForm from './MenuForm';
 
 function Home() {
   return (
@@ -22,6 +23,12 @@ function Home() {
             path="/productform/:id"
             render={(props) => (
               <ProductForm {...props} />
+            )}
+          />
+          <Route
+            path="/menuform/:id"
+            render={(props) => (
+              <MenuForm {...props} />
             )}
           />
         </Switch>
