@@ -12,9 +12,10 @@ function App() {
       <Router>
         <AuthProvider>
           <Switch>
-            <PrivateRoute exact path="/" component={Home} />
+            <Route path="/" component={Home} />
+            {/* <PrivateRoute exact path="/" component={Home} />
             <Route path="/signup" component={Signup} />
-            <Route path="/login" component={Login} />
+            <Route path="/login" component={Login} /> */}
           </Switch>
         </AuthProvider>
       </Router>

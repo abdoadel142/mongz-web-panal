@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import axios from "axios";
 import "../components/Card.css";
 
-class Restaurants extends Component {
+class Groceries extends Component {
   state = {
-    restaurants: [],
+    groceries: [],
   };
 
   componentDidMount() {
@@ -17,56 +17,51 @@ class Restaurants extends Component {
       })
       .then((result) => {
         this.setState({
-          restaurants: result.restaurants.map((restaurant) => {
+          groceries: result.groceries.map((grocerie) => {
             return {
-              ...restaurant,
+              ...grocerie,
             };
           }),
         });
-        this.state.restaurants.map((product) => {
+        this.state.groceries.map((product) => {
           console.log(product.name + " - " + product._id);
         });
       })
       .catch(this.catchError);
   }
 
-  onDelete = async (restaurant) => {
-    console.log(restaurant);
-    const oldrestaurants = [...this.state.restaurants];
-    const restaurants = this.state.restaurants.filter(
-      (p) => p._id !== restaurant._id
+  onDelete = async (grocerie) => {
+    console.log(grocerie);
+    const oldgroceries = [...this.state.groceries];
+    const groceries = this.state.groceries.filter(
+      (p) => p._id !== grocerie._id
     );
-    this.setState({ restaurants });
+    this.setState({ groceries });
     try {
       await axios.delete(
-        "http://192.168.1.67:8080/admin/restaurants/" + restaurant._id
+        "http://192.168.1.67:8080/admin/groceries/" + grocerie._id
       );
     } catch (ex) {
-      this.setState({ restaurants: oldrestaurants });
+      this.setState({ groceries: oldgroceries });
     }
   };
 
-  getClasses() {
-    return this.props.product.count === 0
-      ? "badge badge-warning m-2"
-      : "badge badge-primary m-2";
-  }
 
   render() {
-    const { restaurants } = this.state;
+    const { groceries } = this.state;
     return (
       <>
         <main class="page-content">
-        {/* <div class="content-wrapper"> */}
+          {/* <div class="content-wrapper"> */}
           <div class="container">
-            <h2>Restaurants</h2>
+            <h2>Groceries</h2>
             <hr />
             {/* <div class="row"> */}
             <button
               onClick={() => this.props.history.push("/productform/new")}
               className="btn btn-primary"
             >
-              Add New Restaurant
+              Add New Groceries
             </button>
             {/* </div> */}
           </div>
@@ -94,7 +89,7 @@ class Restaurants extends Component {
               </tr>
             </thead>
             <tbody>
-              {restaurants.map((product) => (
+              {groceries.map((product) => (
                 <tr key={product._id}>
                   <td>{product.name}</td>
                   <td>{product.description}</td>
@@ -128,11 +123,10 @@ class Restaurants extends Component {
               ))}
             </tbody>
           </table>
-        {/* </div> */}
         </main>
       </>
     );
   }
 }
 
-export default Restaurants;
+export default Groceries;

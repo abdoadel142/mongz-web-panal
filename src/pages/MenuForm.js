@@ -17,7 +17,7 @@ class MenuForm extends Component {
     console.log(id);
 
     const { data } = await axios.get(
-      "http://192.168.1.71:8080/admin/restaurants/" + id
+      "http://192.168.1.65:8080/admin/restaurants/" + id
     );
 
     //Clone
@@ -45,7 +45,7 @@ class MenuForm extends Component {
     //   const obj = {
     //     ...this.state,
     //   };
-    await axios.put("http://192.168.1.71:8080/admin/addMenu", obj);
+    await axios.put("http://192.168.1.65:8080/admin/addMenu", obj);
     // }
 
     this.props.history.replace("/restaurants");
@@ -62,7 +62,7 @@ class MenuForm extends Component {
 
   render() {
     return (
-      <div className="wrapper">
+      <div className="wrapperForm">
         <div class="title">
           {this.props.match.params.id === "new"
             ? "Add Menu Item"

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 import "./ProductForm.css";
-import Restaurants from "./Restaurants";
 
 class ProductForm extends Component {
   state = {
@@ -17,12 +16,91 @@ class ProductForm extends Component {
     type: "",
   };
 
+  // async componentDidMount() {
+  //   const id = this.props.match.params.id;
+  //   if (id !== "new") {
+  //     console.log(id);
+  //     const { data } = await axios.get(
+  //       "http://192.168.1.67:8080/admin/restaurants/" + id
+  //     );
+
+  //     //Clone
+  //     const state = { ...this.state };
+  //     // //Edit
+  //     state.name = data.restaurant.name;
+  //     state.description = data.restaurant.description;
+  //     state.type = data.restaurant.type;
+  //     state.rate = data.restaurant.rate;
+  //     state.address = data.restaurant.address;
+  //     state.latitude = data.restaurant.location[0].latitude;
+  //     state.longitude = data.restaurant.location[0].longitude;
+
+  //     // state.openingHours = data.restaurant.openingHours;
+  //     //Set state
+  //     this.setState(state);
+  //   }
+  // }
+
+  // handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   // console.log(this.state);
+  //   //ADD
+  //   if (this.props.match.params.id === "new") {
+  //     //Call Backend
+  //     const obj = {
+  //       ...this.state,
+  //     };
+  //     console.log(obj);
+  //     await axios.post("http://192.168.1.67:8080/admin/addProduct", obj);
+  //   } else {
+  //     //EDit
+  //     const obj = {
+  //       ...this.state,
+  //     };
+
+  //     await axios.put(
+  //       "http://192.168.1.67:8080/admin/restaurants/" +
+  //         this.props.match.params.id,
+  //       obj
+  //     );
+  //   }
+  //   this.props.history.replace("/restaurants");
+  // };
+
+  // handleChange = (e) => {
+  //   //Clone
+  //   let state = { ...this.state };
+  //   //Edit
+  //   state[e.currentTarget.name] = e.currentTarget.value;
+  //   //Set state
+  //   this.setState(state);
+  // };
+
+  // handleOptionChange = () => {
+  //   let type = document.getElementById("type");
+  //   let value = type.options[type.selectedIndex].value;
+  //   //Clone
+  //   let state = { ...this.state };
+  //   //Edit
+  //   state["type"] = value;
+  //   // Set state
+  //   this.setState(state);
+  // };
+
+  // handleTimeChange = (name, value) => {
+  //   //Clone
+  //   let state = { ...this.state };
+  //   //Edit
+  //   state[name] = value;
+  //   //Set state
+  //   this.setState(state);
+  // };
   async componentDidMount() {
     const id = this.props.match.params.id;
     if (id !== "new") {
       console.log(id);
       const { data } = await axios.get(
-        "http://192.168.1.71:8080/admin/restaurants/" + id
+        "http://192.168.1.67:8080/admin/restaurants/" + id
       );
 
       //Clone
@@ -44,15 +122,27 @@ class ProductForm extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(this.state);
+    const formData = new FormData();
+    formData.append("name", this.state.name);
+    formData.append("description", this.state.description);
+    formData.append("latitude", this.state.latitude);
+    formData.append("longitude", this.state.longitude);
+    formData.append("image", this.state.imageUrl);
+    formData.append("openingHour", this.state.openingHour);
+    formData.append("address", this.state.address);
+    formData.append("closingHour", this.state.closingHour);
+    formData.append("rate", this.state.rate);
+    formData.append("type", this.state.type);
+    console.log(this.state);
     //ADD
     if (this.props.match.params.id === "new") {
       //Call Backend
       const obj = {
         ...this.state,
       };
+
       console.log(obj);
-      await axios.post("http://192.168.1.71:8080/admin/addProduct", obj);
+      await axios.post("http://192.168.1.67:8080/admin/addProduct", formData);
     } else {
       //EDit
       const obj = {
@@ -60,12 +150,21 @@ class ProductForm extends Component {
       };
 
       await axios.put(
-        "http://192.168.1.71:8080/admin/restaurants/" +
+        "http://192.168.1.67:8080/admin/restaurants/" +
           this.props.match.params.id,
         obj
       );
     }
     this.props.history.replace("/restaurants");
+  };
+
+  handleChangeImage = (e) => {
+    let state = { ...this.state };
+    state[e.target.name] = e.currentTarget.files[0];
+
+    console.log(e.target.files[0]);
+    //Set state
+    this.setState(state);
   };
 
   handleChange = (e) => {
@@ -99,7 +198,9 @@ class ProductForm extends Component {
 
   render() {
     return (
-      <div className="wrapper">
+      // <main class="page-content">
+
+      <div className="wrapperForm">
         <div class="title">
           {this.props.match.params.id === "new"
             ? "Add Product"
@@ -167,8 +268,8 @@ class ProductForm extends Component {
               name="imageUrl"
               type="file"
               className="input"
-              onChange={this.handleChange}
-              value={this.state.imageUrl}
+              onChange={this.handleChangeImage}
+              // value={this.state.imageUrl}
             />
           </div>
           <div className="inputfield">
@@ -219,6 +320,7 @@ class ProductForm extends Component {
             />
           </div>
         </form>
+        {/* </main> */}
       </div>
     );
   }

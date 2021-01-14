@@ -10,10 +10,12 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  async function signup(email, password) {
-    const user = await axios.put("http://192.168.1.71:8080/auth/adminSignup", {
+  async function signup(email, password, adminName) {
+    console.log(adminName);
+    const user = await axios.put("http://192.168.1.67:8080/auth/adminSignup", {
       email: email,
       password: password,
+      adminName: adminName,
     });
     setLoading(false);
     setCurrentUser(user.data.userId);
@@ -21,7 +23,7 @@ export function AuthProvider({ children }) {
   }
 
   async function login(email, password) {
-    const user = await axios.post("http://192.168.1.71:8080/auth/adminLogin", {
+    const user = await axios.post("http://192.168.1.67:8080/auth/adminLogin", {
       email: email,
       password: password,
     });
@@ -34,13 +36,8 @@ export function AuthProvider({ children }) {
     currentUser,
     login,
     signup,
-    getProducts,
   };
 
-  async function getProducts() {
-    const products = await axios.get("http://192.168.1.71:8080/");
-    return products;
-  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
