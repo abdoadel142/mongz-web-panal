@@ -9,4 +9,4 @@ admin panel for adding and editing in mongzAPI
  
  
 ## views 
-[![Watch the video](https://ibb.co/ygj0x0D)](https://youtu.be/rFNT_aBZgX0)
+[![Watch the video](https://ibb.co/ygj0x0D][img]https://i.ibb.co/j3Xhjhd/Screenshot-5.png)](https://youtu.be/rFNT_aBZgX0)
